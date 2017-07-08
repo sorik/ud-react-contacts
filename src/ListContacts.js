@@ -17,6 +17,10 @@ class ListContacts extends Component {
     this.setState({query: query.trim()})
   }
 
+  clearQuery = () => {
+    this.setState({query: ''})
+  }
+
   showingContacts() {
     let filteredContacts;
     const { contacts } = this.props;
@@ -33,7 +37,9 @@ class ListContacts extends Component {
   }
 
   render() {
-    const { onDeleteContact } = this.props;
+    const { contacts, onDeleteContact } = this.props;
+    const { query } = this.state
+    let showingContacts = this.showingContacts();
 
     return (
       <div className='list-contacts'>
@@ -42,12 +48,18 @@ class ListContacts extends Component {
           className='search-contacts'
           type='text'
           placeholder='search contacts'
-          value={this.state.value}
+          value={query}
           onChange={(event) => this.updateQuery(event.target.value)}
         />
         </div>
+        {showingContacts.length !== contacts.length && (
+          <div className='showing-contacts'>
+            <span>Now showing {showingContacts.length} of {contacts.length} total</span>
+            <button onClick={this.clearQuery}>Show All</button>
+          </div>
+        )}
         <ol className='contact-list'>
-          {this.showingContacts().map(contact => (
+          {showingContacts.map(contact => (
             <li key={contact.id} className='contact-list-item'>
               <div className='contact-avatar' style={{backgroundImage: `url(${contact.avatarURL})`}}></div>
               <div className='contact-details'>
