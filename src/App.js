@@ -17,6 +17,10 @@ class App extends Component {
     ContactsAPI.remove(contact)
   }
 
+  routeToCreateContact = () => {
+    this.setState({ screen: 'create' })
+  }
+
   componentDidMount() {
       ContactsAPI.getAll().then((contacts) => {
         this.setState({ contacts })
@@ -27,7 +31,11 @@ class App extends Component {
     return (
       <div>
         {this.state.screen === 'list' && (
-          <ListContacts onDeleteContact={this.removeContact} contacts={this.state.contacts} />
+          <ListContacts
+            onDeleteContact={this.removeContact}
+            onNavigate={this.routeToCreateContact}
+            contacts={this.state.contacts}
+          />
         )}
         {this.state.screen === 'create' && (
           <CreateContact />
